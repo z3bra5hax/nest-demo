@@ -1,5 +1,40 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "apps/nest-demo/src",
+  "monorepo": true,
+  "root": "apps/nest-demo",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/nest-demo/tsconfig.app.json"
+  },
+  "projects": {
+    "nest-demo": {
+      "type": "application",
+      "root": "apps/nest-demo",
+      "entryFile": "main",
+      "sourceRoot": "apps/nest-demo/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/nest-demo/tsconfig.app.json"
+      }
+    },
+    "biosignal-marshaller": {
+      "type": "application",
+      "root": "apps/biosignal-marshaller",
+      "entryFile": "main",
+      "sourceRoot": "apps/biosignal-marshaller/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/biosignal-marshaller/tsconfig.app.json"
+      }
+    },
+    "biosignal-conversion": {
+      "type": "library",
+      "root": "libs/biosignal-conversion",
+      "entryFile": "index",
+      "sourceRoot": "libs/biosignal-conversion/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/biosignal-conversion/tsconfig.lib.json"
+      }
+    }
+  }
 }
