@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { BaseSignalData, BiologicalMeasurementUnit, MeasurementEvent, ProcessedSignal, RawSignal, RawSignalType, SignalConversionData, SignalConversionService, UnitConverter, VitalMeasurement } from './data';
+import { BaseSignalData, BiologicalMeasurementUnit, ProcessedSignal, RawSignal, RawSignalType, RawSignalTypeName, SignalConversionData, SignalConversionService, UnitConverter, VitalMeasurement } from './data';
 import { BioSignalHelpers as Helpers, SIGNAL_UNIT_MAPPING, SIGNAL_VITAL_MAPPING } from './utils'
 
 @Injectable()
 export class BioSignalConversionService extends SignalConversionService {
 
-    private static getBaseDataConversion(value: number, signal: RawSignalType): BaseSignalData {
+    private static getBaseDataConversion(value: number, signal: RawSignalTypeName): BaseSignalData {
         const simpleUnitConversion: UnitConverter = (__,___) => ({ value, unit });
         const unit: BiologicalMeasurementUnit = SIGNAL_UNIT_MAPPING[signal];
         const conversionTable: Record<RawSignalType, UnitConverter> = {
@@ -16,7 +16,7 @@ export class BioSignalConversionService extends SignalConversionService {
             [RawSignalType.IABP]: Helpers.dynamicUnitConversion(Helpers.bpToMap),
             [RawSignalType.NIBP]: Helpers.dynamicUnitConversion(Helpers.bpToMap),
         }
-        return conversionTable[unit](value, unit);
+        return conversionTable[signal](value, unit);
     }
 
     protected processSignal(rawSignal: RawSignal): ProcessedSignal {

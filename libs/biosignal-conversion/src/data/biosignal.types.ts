@@ -1,3 +1,5 @@
+export type EnumValue<T> = T[keyof T];
+
 export enum BiologicalMeasurementUnit {
     MMHG = 'mmHg',
     Mv = 'mV',
@@ -16,12 +18,14 @@ export enum VitalMeasurement {
 
 export enum RawSignalType {
     PPGPulse = "photoplethysmogram_pulse",
-    IRO2Saturation = "ir_sat_percentatge",
+    IRO2Saturation = "ir_sat_percentage",
     IABP = "artertial_transducer_read",
     EkgPulse = "ekg_RR_Rate",
     NIBP = "nibp_mmhg",
     ETCO2 = "end_tidal_CO2_mmhg"
 }
+
+export type RawSignalTypeName = "photoplethysmogram_pulse"|"ir_sat_percentage"|"artertial_transducer_read"|"ekg_RR_Rate"|"nibp_mmhg"|"end_tidal_CO2_mmhg";
 
 export interface BaseSignalData {
     value: number,
@@ -29,7 +33,7 @@ export interface BaseSignalData {
 }
 
 export interface RawSignal {
-    type: RawSignalType;
+    type: RawSignalTypeName;
     value: number;
     deviceId: string;
     artifactFlag?: boolean;
@@ -42,27 +46,27 @@ export interface ProcessedSignal {
     value: number;
     unit: BiologicalMeasurementUnit;
     originTime: EpochTimeStamp;
-    signalSource: RawSignalType;
+    signalSource: RawSignalTypeName;
     deviceId: string;
     artifactFlag?: boolean;
     rawSignal: RawSignal;
 }
 
-export interface MeasurementEvent {
+export interface MeasurementEventData {
     type: VitalMeasurement;
     value: number;
     measurementUnit: BiologicalMeasurementUnit;
     originTime: ISODateTimeString;
 }
 
-export interface MeasurementEventRecord extends MeasurementEvent {
+export interface MeasurementEventRecord extends MeasurementEventData {
     id?: string;
     processedSignalId?: string;
     patientId?: string;
 }
 
 export interface SignalConversionData {
-    convertedData: MeasurementEvent;
+    convertedData: MeasurementEventData;
     signalProcessedData: ProcessedSignal;
 }
 
